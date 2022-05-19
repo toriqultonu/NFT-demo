@@ -43,10 +43,10 @@ contract AdvancedCollectible is ERC721, VRFConsumerBase {
         requestIdToSender[requestId] = msg.sender;
         requestIdToTokenURI[requestId] = tokenURI;
 
-        emit requestedCollectible(requestId);
+        //emit requestedCollectible(requestId);
     }
 
-    function fulfilRandomness(bytes32 requestId, uint256 randomNumber)
+    function fulfillRandomness(bytes32 requestId, uint256 randomNumber)
         internal
         override
     {
@@ -61,5 +61,14 @@ contract AdvancedCollectible is ERC721, VRFConsumerBase {
         tokenIdToBreed[newItemId] = breed;
         requestedIdToTokenId[requestId] = newItemId;
         tokenCounter = tokenCounter + 1;
+    }
+
+    function setTokenURI(uint256 tokenId, string memory _tokenURI) public {
+        require(
+            _isApprovedOrOwner(_msgSender(), tokenId),
+            "ERC721: transfer caller is not owner nor approved"
+        );
+
+        _setTokenURI(tokenId, _tokenURI);
     }
 }
